@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AzerBot
 {
@@ -10,6 +6,12 @@ namespace AzerBot
     {
         static void Main(string[] args)
         {
+            Bot bot = new Bot();
+            bot.Connect();
+            do
+            {
+                Console.ReadLine();
+            } while (true);
         }
     }
 }
