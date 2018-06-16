@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2026
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzerBot", "AzerBot.csproj", "{70CB6A2E-2400-4561-8C64-983FAF84BF84}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{70CB6A2E-2400-4561-8C64-983FAF84BF84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70CB6A2E-2400-4561-8C64-983FAF84BF84}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70CB6A2E-2400-4561-8C64-983FAF84BF84}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70CB6A2E-2400-4561-8C64-983FAF84BF84}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6AB1731C-60C9-4BF1-BA90-DFF46F9E7FB0}
+	EndGlobalSection
+EndGlobal
