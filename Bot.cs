@@ -15,7 +15,7 @@ using AzerBot.Commands;
 
 namespace AzerBot
 {
-    class Bot
+    public class Bot
     {
         #region Constructors
         public Bot()
@@ -28,12 +28,12 @@ namespace AzerBot
             eatMeScoresRaw = File.ReadAllText($"{path}\\Data\\EatMeScores.json");
             //Converts the JSON into their proper forms
             commandConfigurations = JsonConvert.DeserializeObject<List<CommandConfiguration>>(commandConfigurationsRaw);
-            quotes = JsonConvert.DeserializeObject<List<KeyValuePair<float, string>>>(quotesRaw);
-            eatMeScores = JsonConvert.DeserializeObject<List<KeyValuePair<float,string>>>(eatMeScoresRaw);
+            quotes = JsonConvert.DeserializeObject<List<KeyValuePair<int, string>>>(quotesRaw);
+            eatMeScores = JsonConvert.DeserializeObject<List<KeyValuePair<string,int>>>(eatMeScoresRaw);
             //Check if any of the loaded json is null, and instantiates it if it is
             if(commandConfigurations == null) {commandConfigurations = new List<CommandConfiguration>();}
-            if(quotes == null) {quotes = new List<KeyValuePair<float, string>>();}
-            if(eatMeScores == null) {eatMeScores = new List<KeyValuePair<float, string>>();}
+            if(quotes == null) {quotes = new List<KeyValuePair<int, string>>();}
+            if(eatMeScores == null) {eatMeScores = new List<KeyValuePair<string, int>>();}
             //Loads the Credentials of the bot
             credentials = new ConnectionCredentials(twitchUsername: "AzerBot", twitchOAuth: "7tlb2gedqia143iguq399ub4rtsvb5");
             //Set The Events for the bot
@@ -52,17 +52,53 @@ namespace AzerBot
         private string channel = "azeranth";
         private List<CommandConfiguration> commandConfigurations;
         private string commandConfigurationsRaw;
-        private List<KeyValuePair<float, string>> quotes;
+        private List<KeyValuePair<int, string>> quotes;
         private string quotesRaw = "";
-        private List<KeyValuePair<float, string>> eatMeScores;
+        private List<KeyValuePair<string, int>> eatMeScores;
         private string eatMeScoresRaw = "";
+        private DateTime eatMeTime = DateTime.Now;
         #endregion
 
         #region Properties
-        public List<CommandConfiguration> CommandConfigurations { get => commandConfigurations; set => commandConfigurations = value; }
-        public List<KeyValuePair<float, string>> Quotes { get => quotes; set => quotes = value; }
-        public List<KeyValuePair<float, string>> EatMeScores { get => eatMeScores; set => eatMeScores = value; }
+        public List<CommandConfiguration> CommandConfigurations
+        {
+            get
+            {
+                return commandConfigurations;
+            }
+            set
+            {
+                commandConfigurations = value;
+                commandConfigurations.SaveObject($"{path}\\Data\\CommandConfigurations.json");
+            }
+        }
+        public List<KeyValuePair<int, string>> Quotes
+        {
+            get
+            {
+                return quotes;
+            }
+            set
+            {
+                quotes = value;
+                quotes.SaveObject($"{path}\\Data\\Quotes.json");
+            }
+        }
+        public List<KeyValuePair<string, int>> EatMeScores
+        {
+            get
+            {
+                return eatMeScores;
+            }
+            set
+            {
+                eatMeScores = value;
+                eatMeScores.SaveObject($"{path}\\Data\\EatMeScores.json");
+            }
+        }
+        public DateTime EatMeTime { get => eatMeTime; set => eatMeTime = value; }
         public TwitchClient Client { get => client; set => client = value; }
+        public string Channel { get => channel; set => channel = value; }
         #endregion
 
         #region Methods
@@ -77,13 +113,13 @@ namespace AzerBot
         private void OnConnected(object sender, OnConnectedArgs e)
         {
             Console.WriteLine("Conneciton Successful");
-            Console.WriteLine($"Attempting to join {channel}");
-            Client.JoinChannel(channel);
+            Console.WriteLine($"Attempting to join {Channel}");
+            Client.JoinChannel(Channel);
         }
         private void OnJoined(object sender, OnJoinedChannelArgs e)
         {
             Console.WriteLine($"Joined {e.Channel}");
-            Client.SendMessage(channel, $"Greetings, I am AzerBot");
+            Client.SendMessage(Channel, $"Greetings, I am AzerBot");
         }
         #endregion
 
@@ -99,22 +135,47 @@ namespace AzerBot
 
         private void OnChatCommandReceived(object sender, OnChatCommandReceivedArgs e)
         {
+            ICommand command;
             string CommandPhrase = e.Command.CommandText.ToLower();
-            CommandConfiguration config = CommandConfigurations.FirstOrDefault(n=>n.Name.ToLower() == CommandPhrase);
-            if(!config.Validate(e))
+            CommandConfiguration config = new CommandConfiguration();
+            CommandResult result;
+            if (CommandConfigurations.Any(n => n.Name == CommandPhrase))
             {
-                return;
+                config = CommandConfigurations.FirstOrDefault(n => n.Name.ToLower() == CommandPhrase);
             }
             switch (CommandPhrase)
             {
                 case "greetings":
                 case "hello":
                 case "hi":
-                    Greetings command = new Greetings();
-                    command.Run(client, e, config);
-                break;
+                    command = new Greetings();
+                    result = command.Run(this, e, config);
+                    break;
+                case "addquote":
+                    command = new AddQuote();
+                    result = command.Run(this, e, config);
+                    break;
+                case "quote":
+                    command = new Quote();
+                    result = command.Run(this, e, config);
+                    break;
+                case "removequote":
+                case "deletequote":
+                    command = new DeleteQuote();
+                    result = command.Run(this, e, config);
+                    break;
+                case "eatme":
+                    command = new EatMe();
+                    result = command.Run(this, e, config);
+                    break;
                 default:
-                break;
+                    Client.SendMessage(Channel, $"Unrecognized command \"{e.Command.CommandText}\" type !commands to see a list of commands");
+                return;
+            }
+            if(!result.Successs)
+            {
+                Client.SendMessage(Channel, result.FailureMessage);
+                Console.WriteLine($"Failure {result.FailureReason.ToString()} occured while executing {e.Command.CommandText}. Failure Message: \n {result.FailureMessage}");
             }
         }
         #endregion

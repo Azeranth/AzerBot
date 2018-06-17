@@ -138,10 +138,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bot.cs" />
-    <Compile Include="Command\CommandConfiguration.cs" />
-    <Compile Include="Command\CommandResult.cs" />
-    <Compile Include="Command\Greetings.cs" />
-    <Compile Include="Command\ICommand.cs" />
+    <Compile Include="Commands\AddQuote.cs" />
+    <Compile Include="Commands\CommandConfiguration.cs" />
+    <Compile Include="Commands\CommandResult.cs" />
+    <Compile Include="Commands\EatMe.cs" />
+    <Compile Include="Commands\RemoveQuote.cs" />
+    <Compile Include="Commands\Quote.cs" />
+    <Compile Include="Commands\Generic.cs" />
+    <Compile Include="Commands\Greetings.cs" />
+    <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -6,6 +6,6 @@ namespace AzerBot.Commands
 {
     public interface ICommand
     {
-        CommandResult Run(TwitchClient client, OnChatCommandReceivedArgs e,CommandConfiguration config);
+        CommandResult Run(Bot bot, OnChatCommandReceivedArgs e,CommandConfiguration config);
     }
 }
