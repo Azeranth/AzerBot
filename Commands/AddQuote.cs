@@ -7,7 +7,7 @@ using TwitchLib.Client.Events;
 
 namespace AzerBot.Commands
 {
-    public class AddQuote :Command, ICommand
+    public class AddQuote : ICommand
     {
         public CommandResult Run(Bot bot, OnChatCommandReceivedArgs e, CommandConfiguration config)
         {

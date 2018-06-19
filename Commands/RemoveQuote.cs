@@ -7,7 +7,7 @@ using TwitchLib.Client.Events;
 
 namespace AzerBot.Commands
 {
-    public class DeleteQuote : Command,ICommand
+    public class DeleteQuote : ICommand
     {
         public CommandResult Run(Bot bot, OnChatCommandReceivedArgs e, CommandConfiguration config)
         {

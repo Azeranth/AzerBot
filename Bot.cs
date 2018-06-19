@@ -49,8 +49,7 @@ namespace AzerBot
         private string path = "";
         private TwitchClient client = new TwitchClient();
         private ConnectionCredentials credentials;
-        private string channel = "azeranth" +
-            "";
+        private string channel = "azeranth";
         private List<CommandConfiguration> commandConfigurations;
         private string commandConfigurationsRaw;
         private List<KeyValuePair<int, string>> quotes;
@@ -58,7 +57,6 @@ namespace AzerBot
         private List<KeyValuePair<string, int>> eatMeScores;
         private string eatMeScoresRaw = "";
         private DateTime eatMeTime = DateTime.Now;
-        private List<KeyValuePair<string ,int>> queue= new List<KeyValuePair<string, int>>();
         #endregion
 
         #region Properties
@@ -99,16 +97,6 @@ namespace AzerBot
             }
         }
         public DateTime EatMeTime { get => eatMeTime; set => eatMeTime = value; }
-        public List<KeyValuePair<string, int>> Queue
-        {
-            get { return queue; }
-            set
-            {
-                queue = value;
-                Console.Clear();
-                Console.WriteLine(ReportQueue.PrintQueue(queue));
-            }
-        }
         public TwitchClient Client { get => client; set => client = value; }
         public string Channel { get => channel; set => channel = value; }
         #endregion
@@ -168,7 +156,7 @@ namespace AzerBot
                     result = command.Run(this, e, config);
                     break;
                 case "quote":
-                    command = new ReportQuote();
+                    command = new Quote();
                     result = command.Run(this, e, config);
                     break;
                 case "removequote":
@@ -178,32 +166,6 @@ namespace AzerBot
                     break;
                 case "eatme":
                     command = new EatMe();
-                    result = command.Run(this, e, config);
-                    break;
-                case "eatmescores":
-                case "reporteatme":
-                    command = new ReportEatMe();
-                    result = command.Run(this, e, config);
-                    break;
-                case "queueme":
-                case "joinqueue":
-                case "addqueue":
-                    command = new AddQueue();
-                    result = command.Run(this, e, config);
-                    break;
-                case "leavequeue":
-                case "removequeue":
-                    command = new RemoveQueue();
-                    result = command.Run(this, e, config);
-                    break;
-                case "queue":
-                case "reportqueue":
-                    command = new ReportQueue();
-                    result = command.Run(this, e, config);
-                    break;
-                case "delayme":
-                case "delayqueue":
-                    command = new DelayQueue();
                     result = command.Run(this, e, config);
                     break;
                 default:
